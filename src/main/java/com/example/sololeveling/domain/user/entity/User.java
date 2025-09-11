@@ -37,6 +37,17 @@ public class User extends BaseTimeEntity {
     @Column(name = "phone_number", nullable = false, length = 50)
     private String phoneNumber;
 
+    @Column(name = "user_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    @Column(name = "user_role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+
+
+
     // 양방향 매핑 (필수 아님) - 컬렉션 초기화
     @OneToMany(mappedBy = "user", orphanRemoval = false)
     private List<Transaction> transactions = new ArrayList<>();
