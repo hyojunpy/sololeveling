@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: demo
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    generate-ddl: false
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        enable_lazy_load_no_trans: true
+        format_sql: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/solo_leveling
+    username: root
+    password: 1111
+
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 5MB
+      max-file-size: 5MB
+
+jwt:
+  access:
+    expiry-millis: 3600000
+  refresh:
+    expiry-millis: 40000000
+  secret: rptKgP2Ra47xx2yV2OPRYJpuf8QJzsrzOPjxuXs3E5IMOoP5BE1zFSkZA+Th1O6F8XGsU+hwoyn4HAVNe9QoTQ==
