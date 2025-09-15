@@ -94,21 +94,18 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<User> update(Long id ,UserUpdateRequestDto requestDto) {
+    public Optional<User> update(Long id, UserUpdateRequestDto requestDto) {
 
         String encodedPassword = bCryptPasswordEncoder.encode(requestDto.getPassword());
 
         return userRepository.findById(id).map(existing -> {
-            User updated = new User(
-                    existing.getEmail(),
+            existing.update(
                     requestDto.getName(),
                     encodedPassword,
                     requestDto.getPhoneNumber(),
-                    'Y',
-                    UserStatus.Activate,
-                    Role.ROLE_USER
+                    existing.getStatus()
             );
-            return userRepository.save(updated);
+            return userRepository.save(existing);
         });
     }
 

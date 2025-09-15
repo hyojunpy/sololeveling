@@ -76,7 +76,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      */
     private String getTokenFromRequest(HttpServletRequest request) {
         final String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String headerPrefix = AuthenticationScheme.generateType(AuthenticationScheme.BEARER);
+        final String headerPrefix = AuthenticationScheme.toHeaderValue(AuthenticationScheme.BEARER);
 
         boolean tokenFound = StringUtils.hasText(bearerToken) && bearerToken.startsWith(headerPrefix);
 
@@ -94,7 +94,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      */
     private void setAuthentication(HttpServletRequest request, UserDetails userDetails) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+                userDetails, null, userDetails.getAuthorities());
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

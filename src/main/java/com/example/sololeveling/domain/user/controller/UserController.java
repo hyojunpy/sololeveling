@@ -28,14 +28,14 @@ public class UserController {
     private final UserService userService;
 
     // 사용자 목록 조회 (페이징)
-    @GetMapping
+    @PostMapping
     public ResponseEntity<Page<UserResponseDto>> getUsers(@PageableDefault(size = 20) Pageable pageable) {
         Page<UserResponseDto> page = userService.findAll(pageable).map(UserResponseDto::from);
         return ResponseEntity.ok(page);
     }
 
     // 단일 사용자 조회
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return userService.findById(id)
                 .map(UserResponseDto::from)
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     // 사용자 수정
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UserUpdateRequestDto request
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     // 사용자 삭제
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.delete(id);

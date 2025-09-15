@@ -31,7 +31,7 @@ public class WebConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
 
-    private static final String[] WHITE_LIST = {"/api/users/**"};
+    private static final String[] WHITE_LIST = {"/api/users/regist", "/api/users/login"};
 //    private static final String[] ADMIN_ONLY_URLS = {"/api/brands", "/api/coupons/**"};
 
     @Bean

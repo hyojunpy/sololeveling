@@ -58,7 +58,6 @@ public class User extends BaseTimeEntity {
     private List<Recommendation> recommendations = new ArrayList<>();
 
     public User(String email, String name, String password, String phoneNumber, Character delYN, UserStatus status, Role role) {
-        this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;

@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserUpdateRequestDto {
-
+public class UserAdminUpdateDto {
     @Email
     private String email;
 
@@ -24,4 +23,8 @@ public class UserUpdateRequestDto {
     @Size(max = 50)
     @Pattern(regexp = "^[0-9+\\-()\\s]*$", message = "전화번호를 형식이 옳지 않습니다.")
     private String phoneNumber;
+
+    private UserStatus userStatus;
+
+    private Role role;
 }

@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
-    Optional<User> findByEmail(@NotBlank(message = "이메일은 필수 값입니다.") String email);
+    Optional<User> findByEmail(String email);
 }

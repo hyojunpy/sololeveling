@@ -1,6 +1,7 @@
 package com.example.sololeveling.domain.user.dto;
 
 
+import com.example.sololeveling.domain.user.entity.Role;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,4 @@ public class UserSignupRequestDto {
 
     @NotBlank(message = "연락처는 필수 값입니다.")
     private final String phoneNumber;
-
-    @NotBlank(message = "권한 설정은 필수 값입니다")
-    private final String role;
-
 }

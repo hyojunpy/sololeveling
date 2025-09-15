@@ -11,7 +11,7 @@ public enum AuthenticationScheme {
 
     private final String name;
 
-    public static String generateType(AuthenticationScheme authenticationScheme) {
+    public static String toHeaderValue(AuthenticationScheme authenticationScheme) {
         return authenticationScheme.getName() + " ";
     }
 }
