@@ -7,7 +7,6 @@ import com.example.sololeveling.domain.transaction.entity.Transaction;
 import com.example.sololeveling.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,10 +66,16 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
-    public void update(String name, String password, String phoneNumber, UserStatus userStatus) {
+    public void update(String name, String encodedPassword, String phoneNumber, UserStatus userStatus) {
         this.name = name;
-        this.password = password;
+        this.password = encodedPassword;
         this.phoneNumber = phoneNumber;
         this.status = userStatus;
     }
+
+    @PrePersist
+    void prePersist() {
+        if (this.delYN == null) this.delYN = 'N';
+    }
+    public void softDelete() { this.delYN = 'Y'; }
 }

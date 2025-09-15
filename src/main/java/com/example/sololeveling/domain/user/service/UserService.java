@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthenticationManager authenticationMan;
+    private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
 
@@ -66,7 +67,11 @@ public class UserService {
                 Role.ROLE_USER
         );
 
-        user = userRepository.save(user);
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
 
         return UserResponseDto.from(user);
     }
@@ -74,11 +79,14 @@ public class UserService {
     //로그인
     @Transactional
     public JwtAuthResponse login(UserLoginRequestDto requestDto) {
-
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("NOT_FOUND_VALUE"));
 
-        Authentication authentication = this.authenticationMan.authenticate(
+        if (user.getDelYN() == 'Y' || user.getStatus() != UserStatus.Activate) {
+            throw new IllegalStateException("비활성화된 사용자입니다.");
+        }
+
+        Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         requestDto.getEmail(),
                         requestDto.getPassword())
@@ -93,15 +101,18 @@ public class UserService {
         return new JwtAuthResponse(AuthenticationScheme.BEARER.getName(), accessToken, refreshToken);
     }
 
+    //유저 정보 수정
     @Transactional
     public Optional<User> update(Long id, UserUpdateRequestDto requestDto) {
 
-        String encodedPassword = bCryptPasswordEncoder.encode(requestDto.getPassword());
-
         return userRepository.findById(id).map(existing -> {
+            final String updatedPassword =
+                    (requestDto.getPassword() != null && !requestDto.getPassword().isBlank())
+                            ? bCryptPasswordEncoder.encode(requestDto.getPassword())
+                            : existing.getPassword();
             existing.update(
                     requestDto.getName(),
-                    encodedPassword,
+                    updatedPassword,
                     requestDto.getPhoneNumber(),
                     existing.getStatus()
             );
@@ -109,10 +120,11 @@ public class UserService {
         });
     }
 
+    //유저 삭제(소프트 del)
     @Transactional
-    public void delete(Long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+    public void delete(String Email, Long id) {
+        if (userRepository.existsByEmail(Email)) {
+            userRepository.findByEmail(Email).ifPresent(user -> user.softDelete());
         }
     }
 }

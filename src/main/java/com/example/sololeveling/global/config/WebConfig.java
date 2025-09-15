@@ -31,24 +31,22 @@ public class WebConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
 
-    private static final String[] WHITE_LIST = {"/api/users/regist", "/api/users/login"};
-//    private static final String[] ADMIN_ONLY_URLS = {"/api/brands", "/api/coupons/**"};
+    private static final String[] WHITE_LIST = {"/api/users", "/api/users/login"};
+    private static final String[] ADMIN_ONLY_URLS = {"/api/product/**", "/api/recommnedation/**"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfig) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfig))
                 .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(WHITE_LIST).permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/items/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, WHITE_LIST).permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/api/items/**").hasRole(ROLE_ADMIN.getName())
-//                        .requestMatchers(HttpMethod.PATCH, "/api/items/**").hasRole(ROLE_ADMIN.getName())
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
-//                        .requestMatchers(ADMIN_ONLY_URLS).hasRole(ROLE_ADMIN.getName())
+                        .requestMatchers(ADMIN_ONLY_URLS).hasRole(ROLE_ADMIN.getName())
                         .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/sub/**").permitAll()
-                        .requestMatchers("/pub/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handler -> handler
