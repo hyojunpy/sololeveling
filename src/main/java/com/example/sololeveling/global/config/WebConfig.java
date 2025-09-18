@@ -32,7 +32,7 @@ public class WebConfig {
     private final AccessDeniedHandler accessDeniedHandler;
 
     private static final String[] WHITE_LIST = {"/api/users", "/api/users/login"};
-    private static final String[] ADMIN_ONLY_URLS = {"/api/product/**", "/api/recommnedation/**"};
+    private static final String[] ADMIN_ONLY_URLS = {"/api/product/**", "/api/recommendation/**"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfig) throws Exception {

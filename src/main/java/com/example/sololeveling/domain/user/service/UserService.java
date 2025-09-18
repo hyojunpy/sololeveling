@@ -79,6 +79,7 @@ public class UserService {
     //로그인
     @Transactional
     public JwtAuthResponse login(UserLoginRequestDto requestDto) {
+
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("NOT_FOUND_VALUE"));
 
@@ -122,9 +123,14 @@ public class UserService {
 
     //유저 삭제(소프트 del)
     @Transactional
-    public void delete(String Email, Long id) {
-        if (userRepository.existsByEmail(Email)) {
-            userRepository.findByEmail(Email).ifPresent(user -> user.softDelete());
+    public void delete(String email, Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("NOT_FOUND_VALUE"));
+        if (!user.getEmail().equals(email)) {
+            throw new org.springframework.security.access.AccessDeniedException("본인만 삭제할 수 있습니다.");
+        }
+        if (user.getDelYN() != 'Y') {
+            user.softDelete();
         }
     }
 }
