@@ -55,6 +55,7 @@ public class UserService {
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
+
         String encodedPassword = bCryptPasswordEncoder.encode(requestDto.getPassword());
 
         User user = new User(
@@ -109,8 +110,7 @@ public class UserService {
         return userRepository.findById(id).map(existing -> {
             final String updatedPassword =
                     (requestDto.getPassword() != null && !requestDto.getPassword().isBlank())
-                            ? bCryptPasswordEncoder.encode(requestDto.getPassword())
-                            : existing.getPassword();
+                            ? bCryptPasswordEncoder.encode(requestDto.getPassword()) : existing.getPassword();
             existing.update(
                     requestDto.getName(),
                     updatedPassword,

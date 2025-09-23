@@ -1,21 +1,21 @@
 package com.example.sololeveling.global.config.auth;
 
+import com.example.sololeveling.domain.user.entity.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
+    private final User user;
     private final String email;
     private final String password;
     private final String role;
-
-    public UserDetailsImpl(String email, String password, String role) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -28,9 +28,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return email; // 여기서 email을 username으로 사용
-    }
+    public String getUsername() {return email; }
 
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }

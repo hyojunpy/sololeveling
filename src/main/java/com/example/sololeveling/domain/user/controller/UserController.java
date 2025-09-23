@@ -31,15 +31,18 @@ public class UserController {
 
     private final UserService userService;
 
+    // 관리자만 할 수 있도록
     // 사용자 목록 조회 (페이징)
-    @PostMapping
-    public ResponseEntity<Page<UserResponseDto>> getUsers(@PageableDefault(size = 20) Pageable pageable) {
+    @PostMapping("/find")
+    public ResponseEntity<Page<UserResponseDto>> getUsers(
+            @PageableDefault(size = 20) Pageable pageable,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Page<UserResponseDto> page = userService.findAll(pageable).map(UserResponseDto::from);
         return ResponseEntity.ok(page);
     }
 
     // 단일 사용자 조회
-    @PostMapping("/find-id/{id}")
+    @PostMapping("/find/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         return userService.findById(id)
                 .map(UserResponseDto::from)
