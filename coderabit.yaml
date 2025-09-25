@@ -1,15 +1,17 @@
 # .coderabbit.yaml
-language: "en" # 한국말로 설정
+language: "ko-KR" # 리뷰 언어: 한국어
 early_access: false
+
 reviews:
-  profile: "balanced" # 리뷰 너무 빡세게는 안한다는 뜻
-  request_changes_workflow: true # 코드래빗이 리뷰 끝나면 알아서 PR 승인하게끔
-  high_level_summary: true
-  poem: true
-  review_status: true
+  profile: "balanced" # chill → balanced (코멘트가 조금 더 구체적이고 실용적)
+  request_changes_workflow: true # 리뷰 후 자동 승인/변경 요청
+  high_level_summary: true # PR 요약 제공
+  poem: true # 시 기능 유지
+  review_status: true # 리뷰 상태 표시
   collapse_walkthrough: false
   auto_review:
-    enabled: true
-    drafts: false
+    enabled: true # 자동 리뷰 켜기
+    drafts: false # Draft PR은 제외
+
 chat:
   auto_reply: true
