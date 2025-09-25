@@ -1,0 +1,62 @@
+package com.example.sololeveling.global.config;
+
+import com.example.sololeveling.global.config.auth.JwtAuthFilter;
+import jakarta.servlet.DispatcherType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import static com.example.sololeveling.domain.user.entity.Role.ROLE_ADMIN;
+
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class WebConfig {
+
+    private final JwtAuthFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final AccessDeniedHandler accessDeniedHandler;
+
+    private static final String[] WHITE_LIST = {"/api/users", "/api/users/login"};
+    private static final String[] ADMIN_ONLY_URLS = {"/api/product/**", "/api/recommendation/**"};
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfig) throws Exception {
+        http.cors(cors -> cors.configurationSource(corsConfig))
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, WHITE_LIST).permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/api/items/**").hasRole(ROLE_ADMIN.getName())
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
+                        .requestMatchers(ADMIN_ONLY_URLS).hasRole(ROLE_ADMIN.getName())
+                        .requestMatchers("/ws/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(handler -> handler
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}

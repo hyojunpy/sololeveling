@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 
@@ -30,12 +31,31 @@ public class Asset extends BaseTimeEntity {
     @Column(name = "amount", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "del_yn", nullable = false, length = 1)
+    private Character delYN;
+
     // FK: user_id -> users.id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public void updateAmount(BigDecimal delta) {
-        this.amount = this.amount.add(delta);
+    public Asset(String type, String name, BigDecimal amount, Character delYN, User user) {
+        this.type = type;
+        this.name = name;
+        this.amount = amount;
+        this.delYN = delYN;
+        this.user = user;
     }
+
+    public void update(String type, String name, BigDecimal amount) {
+        this.type = type;
+        this.name = name;
+        this.amount = amount;
+    }
+
+    @PrePersist
+    void prePersist() {
+        if (this.delYN == null) this.delYN = 'N';
+    }
+    public void softDelete() { this.delYN = 'Y'; }
 }
