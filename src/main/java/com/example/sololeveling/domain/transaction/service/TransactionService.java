@@ -22,7 +22,7 @@ public class TransactionService {
 
     //거래 전체 조회
     @Transactional(readOnly = true)
-    public Page<Transaction> findAllByUser(Pageable pageable, User user) {
+    public Page<Transaction> findAllByUser(User user, Pageable pageable) {
         return transactionRepository.findAllByUser(user, pageable);
     }
 

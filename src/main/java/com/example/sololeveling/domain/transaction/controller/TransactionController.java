@@ -29,9 +29,9 @@ public class TransactionController {
 
     @PostMapping("/find")
     public ResponseEntity<Page<TransactionResponseDto>> getTransactions(
-            @PageableDefault(size = 20) Pageable pageable,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Page<TransactionResponseDto> page = transactionService.findAllByUser(pageable, userDetails.getUser()).map(TransactionResponseDto::from);
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PageableDefault(size = 20) Pageable pageable) {
+        Page<TransactionResponseDto> page = transactionService.findAllByUser(userDetails.getUser(), pageable).map(TransactionResponseDto::from);
         return ResponseEntity.ok(page);
     }
 
