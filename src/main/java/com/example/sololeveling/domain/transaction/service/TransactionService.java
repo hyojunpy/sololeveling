@@ -60,6 +60,7 @@ public class TransactionService {
         transaction.update(
                 requestDto.getCategory(),
                 requestDto.getType(),
+                requestDto.getDate(),
                 requestDto.getAmount(),
                 requestDto.getDescription());
         return Optional.of(transactionRepository.save(transaction));

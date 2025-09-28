@@ -50,9 +50,10 @@ public class Transaction {
         this.user = user;
     }
 
-    public void update(String category, TransactionType type, BigDecimal amount, String description) {
+    public void update(String category, TransactionType type, LocalDate date,BigDecimal amount, String description) {
         this.category = category;
         this.type = type;
+        this.date = date;
         this.amount = amount;
         this.description = description;
     }
