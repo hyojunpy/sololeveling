@@ -33,7 +33,7 @@ public class Transaction {
     private LocalDate date;
 
     @Lob
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", nullable = false)
     private String description;
 
     // FK: user_id -> users.id

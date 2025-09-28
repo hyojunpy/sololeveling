@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    Page<Transaction> findAllByUser(Pageable pageable, User user);
+    Page<Transaction> findAllByUser(User user, Pageable pageable);
 
     Optional<Transaction> findByIdAndUser(Long id, User user);
 
