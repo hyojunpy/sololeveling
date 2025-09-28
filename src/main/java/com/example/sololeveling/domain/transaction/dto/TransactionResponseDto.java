@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Getter
 @RequiredArgsConstructor
 public class TransactionResponseDto {
+    private final Long id;
     private final String category;
     private final TransactionType type;
     private final BigDecimal amount;
@@ -19,6 +20,7 @@ public class TransactionResponseDto {
 
     public static TransactionResponseDto from(Transaction transaction) {
         return new TransactionResponseDto(
+                transaction.getId(),
                 transaction.getCategory(),
                 transaction.getType(),
                 transaction.getAmount(),

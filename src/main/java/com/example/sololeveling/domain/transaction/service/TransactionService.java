@@ -20,18 +20,19 @@ import java.util.Optional;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
 
-
+    //거래 전체 조회
     @Transactional(readOnly = true)
-    public Page<Transaction> findAll(Pageable pageable) {
-        return transactionRepository.findAll(pageable);
+    public Page<Transaction> findAllByUser(Pageable pageable, User user) {
+        return transactionRepository.findAllByUser(pageable, user);
     }
 
-    //Id로 유저 조회
+    //Id로 거래 조회
     @Transactional(readOnly = true)
-    public Optional<Transaction> findById(Long id) {
-        return transactionRepository.findById(id);
+    public Optional<Transaction> findByIdForUser(Long id, User user) {
+        return transactionRepository.findByIdAndUser(id, user);
     }
 
+    //거래 내역 생성
     @Transactional
     public TransactionResponseDto createTransaction(User user,
                                                     TransactionRequestDto requestDto) {
@@ -46,6 +47,8 @@ public class TransactionService {
     }
 
 
+    //거래 내역 수정
+    @Transactional
     public Optional<Transaction> updateTransaction(Long id, User user, TransactionRequestDto requestDto) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
@@ -54,23 +57,23 @@ public class TransactionService {
             throw new AccessDeniedException("You do not have permission to modify this transaction.");
         }
 
-        return transactionRepository.findById(id).map(existing -> {
-            existing.update(
-                    requestDto.getCategory(),
-                    requestDto.getType(),
-                    requestDto.getAmount(),
-                    requestDto.getDescription());
-            return transactionRepository.save(existing);
-        });
+        transaction.update(
+                requestDto.getCategory(),
+                requestDto.getType(),
+                requestDto.getAmount(),
+                requestDto.getDescription());
+        return Optional.of(transactionRepository.save(transaction));
     }
 
-    public void delete(Long Id, User user) {
-        Optional<Transaction> transaction = transactionRepository.findById(Id);
-        if (transaction.isPresent()) {
-            Transaction t = transaction.get();
-            if (t.getUser().getId().equals(user.getId())) {
-                transactionRepository.deleteById(Id);
-            }
+    //거래 내역 삭제
+    @Transactional
+    public void delete(Long id, User user) {
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
+
+        if (!transaction.getUser().getId().equals(user.getId())) {
+            throw new AccessDeniedException("You do not have permission to modify this transaction.");
         }
+
+        transactionRepository.deleteByIdAndUser(id, user);
     }
 }
