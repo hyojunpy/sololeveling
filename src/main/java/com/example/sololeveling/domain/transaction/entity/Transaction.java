@@ -19,11 +19,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // FK: user_id -> users.id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Column(name = "category", nullable = false, length = 100)
     private String category;
 
@@ -38,6 +33,28 @@ public class Transaction {
     private LocalDate date;
 
     @Lob
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", nullable = false)
     private String description;
+
+    // FK: user_id -> users.id
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Transaction(String category, TransactionType type, BigDecimal amount, LocalDate date, String description, User user) {
+        this.category = category;
+        this.type = type;
+        this.amount = amount;
+        this.date = date;
+        this.description = description;
+        this.user = user;
+    }
+
+    public void update(String category, TransactionType type, LocalDate date,BigDecimal amount, String description) {
+        this.category = category;
+        this.type = type;
+        this.date = date;
+        this.amount = amount;
+        this.description = description;
+    }
 }
