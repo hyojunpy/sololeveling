@@ -28,8 +28,6 @@ public class ProductService {
 //        if(user.getRole() != Role.ROLE_ADMIN) {
 //            throw new AccessDeniedException("관리자만 접근할 수 있습니다.");
 //        }
-
-
         String name = requestDto.getProductName().trim();
 
         if (productRepository.existsByNameIgnoreCase(name)) {
