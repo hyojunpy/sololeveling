@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @Getter
 @RequiredArgsConstructor
 public class ProductRequestDto {
-    private String productName;
-    private ProductType productType;
-    private BigDecimal productInterestRate;
-    private Integer productDurationMonths;
-    private String productDescription;
+    private final String productName;
+    private final ProductType productType;
+    private final BigDecimal productInterestRate;
+    private final Integer productDurationMonths;
+    private final String productDescription;
 }

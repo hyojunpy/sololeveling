@@ -35,10 +35,10 @@ public class Goal extends BaseTimeEntity {
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
 
-    public Goal(User user, BigDecimal targetAmount, BigDecimal currentAmount, LocalDate deadline) {
+    public Goal(User user, BigDecimal currentAmount, BigDecimal targetAmount, LocalDate deadline) {
         this.user = user;
-        this.targetAmount = targetAmount;
         this.currentAmount = currentAmount;
+        this.targetAmount = targetAmount;
         this.deadline = deadline;
     }
 

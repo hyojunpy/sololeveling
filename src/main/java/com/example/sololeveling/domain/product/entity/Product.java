@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
 @EqualsAndHashCode(of = "id")
 public class Product extends BaseTimeEntity {
 
@@ -24,7 +23,7 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false, length = 255, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_0900_ai_ci")
     private String name;
 
     // ENUM 타입

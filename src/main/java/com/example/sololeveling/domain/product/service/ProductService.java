@@ -34,9 +34,8 @@ public class ProductService {
             throw new IllegalArgumentException("이미 존재하는 상품명입니다: " + name);
         }
 
-
         Product product = new Product(
-                requestDto.getProductName(),
+                name,
                 requestDto.getProductType(),
                 requestDto.getProductInterestRate(),
                 requestDto.getProductDurationMonths(),
@@ -64,6 +63,9 @@ public class ProductService {
     //상품 상세 조회 (설명을 따로 빼야겠다..)
     @Transactional(readOnly = true)
     public ProductResponseDto findById(Long id) {
-        return ProductResponseDto.from(productRepository.findById(id).get());
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다.:" +id));
+
+        return ProductResponseDto.from(product);
     }
 }
