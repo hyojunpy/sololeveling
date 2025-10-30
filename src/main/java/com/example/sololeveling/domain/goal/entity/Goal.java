@@ -42,9 +42,9 @@ public class Goal extends BaseTimeEntity {
         this.deadline = deadline;
     }
 
-    public void update(BigDecimal targetAmount, BigDecimal currentAmount, LocalDate deadline) {
-        this.targetAmount = targetAmount;
+    public void update(BigDecimal currentAmount, BigDecimal targetAmount,  LocalDate deadline) {
         this.currentAmount = currentAmount;
+        this.targetAmount = targetAmount;
         this.deadline = deadline;
     }
 
