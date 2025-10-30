@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Goal extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +34,18 @@ public class Goal extends BaseTimeEntity {
     // deadline 컬럼명, DATE 타입은 LocalDate 권장
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
+
+    public Goal(User user, BigDecimal currentAmount, BigDecimal targetAmount, LocalDate deadline) {
+        this.user = user;
+        this.currentAmount = currentAmount;
+        this.targetAmount = targetAmount;
+        this.deadline = deadline;
+    }
+
+    public void update(BigDecimal currentAmount, BigDecimal targetAmount,  LocalDate deadline) {
+        this.currentAmount = currentAmount;
+        this.targetAmount = targetAmount;
+        this.deadline = deadline;
+    }
+
 }

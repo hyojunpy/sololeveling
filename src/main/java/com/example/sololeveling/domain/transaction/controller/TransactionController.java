@@ -27,6 +27,7 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+    //거래 내역 조회
     @PostMapping("/find")
     public ResponseEntity<Page<TransactionResponseDto>> getTransactions(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -35,6 +36,7 @@ public class TransactionController {
         return ResponseEntity.ok(page);
     }
 
+    //거래 내역 조회(단건)
     @PostMapping("/find/{id}")
     public ResponseEntity<TransactionResponseDto> getTransaction(
             @PathVariable Long id,
@@ -45,6 +47,7 @@ public class TransactionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //거래 생성
     @PostMapping
     public ResponseEntity<TransactionResponseDto> createTransaction
             (@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -56,6 +59,7 @@ public class TransactionController {
         return ResponseEntity.created(location).body(responseDto);
     }
 
+    //거래 수정
     @PostMapping("edit/{id}")
     public ResponseEntity<TransactionResponseDto> updateTransaction(
             @PathVariable Long id,

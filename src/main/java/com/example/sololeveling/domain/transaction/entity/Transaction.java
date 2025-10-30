@@ -1,6 +1,7 @@
 package com.example.sololeveling.domain.transaction.entity;
 
 import com.example.sololeveling.domain.user.entity.User;
+import com.example.sololeveling.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Transaction {
+public class Transaction extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
